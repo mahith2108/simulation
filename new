@@ -1,0 +1,171 @@
+ampl: display log_file;file -
+line 1
+offset 8
+log_file is not defined
+ampl: solve;CPLEX 12.6.1.0: optimal integer solution; objective 0
+2327 MIP simplex iterations
+450 branch-and-bound nodes
+No basis.
+ampl: display M;M = 50000
+
+ampl: _display _OBJS;_display 1 0 1
+_OBJS
+overtime_cost
+ampl: show overtime_cost;minimize overtime_cost: sum{o in OPERATING_ROOMS} overtime_penalty*
+  overtime[o];
+ampl: _display indexarity('overtime_cost');_display 0 1 1
+indexarity('overtime_cost')
+0
+ampl: option 'omit_zero_rows';option omit_zero_rows 0;
+ampl: _display overtime_cost.val ;_display 0 1 1
+overtime_cost
+0
+ampl: _display overtime_cost.val;_display 0 1 1
+overtime_cost
+0
+ampl: display overtime_cost;overtime_cost = 0
+
+ampl: display OPERATING_ROOMS;set OPERATING_ROOMS := o1 o2;
+
+ampl: display SURGERIES;set SURGERIES := s1 s2 s3 s4 s5 s6;
+
+ampl: display SURGERIES_IN_ROOM;set SURGERIES_IN_ROOM[o1] := s1 s2 s3;
+set SURGERIES_IN_ROOM[o2] := s4 s5 s6;
+
+ampl: _display _PARS;_display 1 0 7
+_PARS
+num_resources
+daily_work_time_mins
+overtime_penalty
+M
+preop_time
+op_time
+room_prep_time
+ampl: show num_resources;param num_resources;
+ampl: _display indexarity('num_resources');_display 0 1 1
+indexarity('num_resources')
+0
+ampl: show daily_work_time_mins;param daily_work_time_mins;
+ampl: _display indexarity('daily_work_time_mins');_display 0 1 1
+indexarity('daily_work_time_mins')
+0
+ampl: show overtime_penalty;param overtime_penalty;
+ampl: _display indexarity('overtime_penalty');_display 0 1 1
+indexarity('overtime_penalty')
+0
+ampl: show M;param M;
+ampl: _display indexarity('M');_display 0 1 1
+indexarity('M')
+0
+ampl: show preop_time;param preop_time{s in SURGERIES};
+ampl: _display indexarity('preop_time');_display 0 1 1
+indexarity('preop_time')
+1
+ampl: show op_time;param op_time{s in SURGERIES};
+ampl: _display indexarity('op_time');_display 0 1 1
+indexarity('op_time')
+1
+ampl: show room_prep_time;param room_prep_time;
+ampl: _display indexarity('room_prep_time');_display 0 1 1
+indexarity('room_prep_time')
+0
+ampl: _display preop_time;_display 1 1 6
+preop_time
+s1,30
+s2,35
+s3,40
+s4,45
+s5,50
+s6,65
+ampl: _display op_time;_display 1 1 6
+op_time
+s1,60
+s2,80
+s3,90
+s4,120
+s5,140
+s6,145
+ampl: _display _VARS;_display 1 0 6
+_VARS
+preop_start_time
+op_start_time
+op_end_time
+y
+z
+overtime
+ampl: show preop_start_time;var preop_start_time{s in SURGERIES}  integer >= 1;
+ampl: _display indexarity('preop_start_time');_display 0 1 1
+indexarity('preop_start_time')
+1
+ampl: show op_start_time;var op_start_time{s in SURGERIES}  integer >= 1;
+ampl: _display indexarity('op_start_time');_display 0 1 1
+indexarity('op_start_time')
+1
+ampl: show op_end_time;var op_end_time{s in SURGERIES}  integer >= 1;
+ampl: _display indexarity('op_end_time');_display 0 1 1
+indexarity('op_end_time')
+1
+ampl: show y;var y{s_prim in SURGERIES, s_bis in SURGERIES: s_prim != s_bis}  binary;
+ampl: _display indexarity('y');_display 0 1 1
+indexarity('y')
+2
+ampl: show z;var z{s_prim in SURGERIES, s_bis in SURGERIES: s_prim != s_bis}  binary;
+ampl: _display indexarity('z');_display 0 1 1
+indexarity('z')
+2
+ampl: show overtime;var overtime{o in OPERATING_ROOMS}  integer >= 0;
+ampl: _display indexarity('overtime');_display 0 1 1
+indexarity('overtime')
+1
+ampl: _display preop_start_time.val;_display 1 1 6
+preop_start_time.val
+s1,1
+s2,186
+s3,381
+s4,1
+s5,146
+s6,301
+ampl: _display op_start_time.val;_display 1 1 6
+op_start_time.val
+s1,31
+s2,221
+s3,421
+s4,46
+s5,196
+s6,366
+ampl: _display op_end_time.val;_display 1 1 6
+op_end_time.val
+s1,91
+s2,301
+s3,511
+s4,166
+s5,336
+s6,511
+ampl: display y;y [*,*]
+:   s1  s2  s3  s4  s5  s6    :=
+s1   .   0   0   1   0   0
+s2   1   .   0   1   1   0
+s3   1   1   .   1   1   1
+s4   1   0   0   .   0   0
+s5   1   0   0   1   .   0
+s6   1   1   0   1   1   .
+;
+
+ampl: display z;z [*,*]
+:   s1  s2  s3  s4  s5  s6    :=
+s1   .   0   0   0   0   0
+s2   1   .   0   1   0   0
+s3   1   1   .   1   1   0
+s4   0   0   0   .   0   0
+s5   1   0   0   0   .   0
+s6   1   1   0   1   0   .
+;
+
+ampl: display overtime;overtime [*] :=
+o1  0
+o2  0
+;
+
+ampl: display daily_work_time_mins;daily_work_time_mins = 510
+
+ampl: display pretime_betw_op;

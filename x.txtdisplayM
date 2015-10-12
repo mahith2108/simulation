@@ -1,0 +1,252 @@
+overtime_cost = 0
+
+set OPERATING_ROOMS := o1 o2;
+
+set SURGERIES := s1 s2 s3 s4 s5 s6;
+
+set SURGERIES_IN_ROOM[o1] := s1 s2 s3;
+set SURGERIES_IN_ROOM[o2] := s4 s5 s6;
+
+preop_time [*] :=
+s1  30
+s2  35
+s3  40
+s4  45
+s5  50
+s6  65
+;
+
+op_time [*] :=
+s1   60
+s2   80
+s3   90
+s4  120
+s5  140
+s6  145
+;
+
+preop_start_time [*] :=
+s1  0
+s2  0
+s3  0
+s4  0
+s5  0
+s6  0
+;
+
+op_start_time [*] :=
+s1  0
+s2  0
+s3  0
+s4  0
+s5  0
+s6  0
+;
+
+y [*,*]
+:   s1  s2  s3  s4  s5  s6    :=
+s1   .   0   0   0   0   0
+s2   0   .   0   0   0   0
+s3   0   0   .   0   0   0
+s4   0   0   0   .   0   0
+s5   0   0   0   0   .   0
+s6   0   0   0   0   0   .
+;
+
+z [*,*]
+:   s1  s2  s3  s4  s5  s6    :=
+s1   .   0   0   0   0   0
+s2   0   .   0   0   0   0
+s3   0   0   .   0   0   0
+s4   0   0   0   .   0   0
+s5   0   0   0   0   .   0
+s6   0   0   0   0   0   .
+;
+
+overtime [*] :=
+o1  0
+o2  0
+;
+
+daily_work_time_mins = 510
+
+pretime_betw_op :=
+o1 s1 s2   0
+o1 s1 s3   0
+o1 s2 s1   0
+o1 s2 s3   0
+o1 s3 s1   0
+o1 s3 s2   0
+o2 s4 s5   0
+o2 s4 s6   0
+o2 s5 s4   0
+o2 s5 s6   0
+o2 s6 s4   0
+o2 s6 s5   0
+;
+
+ampl: option 'solver' 'cplex';ampl: option 'cplex_options' 'mipdisplay=2';ampl: solve;CPLEX 12.6.1.0: mipdisplay=2
+MIP Presolve eliminated 12 rows and 0 columns.
+MIP Presolve modified 60 coefficients.
+Reduced MIP has 132 rows, 68 columns, and 444 nonzeros.
+Reduced MIP has 60 binaries, 8 generals, 0 SOSs, and 0 indicators.
+Probing time = 0.00 sec. (0.08 ticks)
+Reduced MIP has 132 rows, 68 columns, and 444 nonzeros.
+Reduced MIP has 60 binaries, 8 generals, 0 SOSs, and 0 indicators.
+Probing time = 0.00 sec. (0.13 ticks)
+Clique table members: 96.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 4 threads.
+Root relaxation solution time = 0.00 sec. (0.15 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+      0     0        0.0000    30                      0.0000       30         
+      0     0        0.0000     3                     Cuts: 9       56         
+      0     0        0.0000     6                     Cuts: 2       60         
+      0     0        0.0000     7                  Cliques: 1       66         
+*     0+    0                           35.0000        0.0000           100.00%
+*     0+    0                           20.0000        0.0000           100.00%
+      0     2        0.0000     7       20.0000        0.0000       66  100.00%
+Elapsed time = 0.05 sec. (11.72 ticks, tree = 0.00 MB)
+*    34    17      integral     0        5.0000        0.0000      294  100.00%
+*   220    46      integral     0        1.0000        0.0000     1277  100.00%
+*   438    33      integral     0        0.0000        0.0000     2297    0.00%
+
+Clique cuts applied:  15
+Cover cuts applied:  2
+Implied bound cuts applied:  23
+Mixed integer rounding cuts applied:  1
+Gomory fractional cuts applied:  1
+
+Root node processing (before b&c):
+  Real time             =    0.05 sec. (11.65 ticks)
+Parallel b&c, 4 threads:
+  Real time             =    0.06 sec. (11.74 ticks)
+  Sync time (average)   =    0.02 sec.
+  Wait time (average)   =    0.02 sec.
+                          ------------
+Total (root+branch&cut) =    0.11 sec. (23.39 ticks)
+CPLEX 12.6.1.0: optimal integer solution; objective 0
+2327 MIP simplex iterations
+450 branch-and-bound nodes
+No basis.
+ampl: _display _OBJS;_display 1 0 1
+_OBJS
+overtime_cost
+ampl: show overtime_cost;minimize overtime_cost: sum{o in OPERATING_ROOMS} overtime_penalty*
+  overtime[o];
+ampl: _display indexarity('overtime_cost');_display 0 1 1
+indexarity('overtime_cost')
+0
+ampl: option 'omit_zero_rows';option omit_zero_rows 0;
+ampl: _display overtime_cost.val ;_display 0 1 1
+overtime_cost
+0
+ampl: _display overtime_cost.val;_display 0 1 1
+overtime_cost
+0
+ampl: _display _PARS;_display 1 0 7
+_PARS
+num_resources
+daily_work_time_mins
+overtime_penalty
+M
+preop_time
+op_time
+room_prep_time
+ampl: show num_resources;param num_resources;
+ampl: _display indexarity('num_resources');_display 0 1 1
+indexarity('num_resources')
+0
+ampl: show daily_work_time_mins;param daily_work_time_mins;
+ampl: _display indexarity('daily_work_time_mins');_display 0 1 1
+indexarity('daily_work_time_mins')
+0
+ampl: show overtime_penalty;param overtime_penalty;
+ampl: _display indexarity('overtime_penalty');_display 0 1 1
+indexarity('overtime_penalty')
+0
+ampl: show M;param M;
+ampl: _display indexarity('M');_display 0 1 1
+indexarity('M')
+0
+ampl: show preop_time;param preop_time{s in SURGERIES};
+ampl: _display indexarity('preop_time');_display 0 1 1
+indexarity('preop_time')
+1
+ampl: show op_time;param op_time{s in SURGERIES};
+ampl: _display indexarity('op_time');_display 0 1 1
+indexarity('op_time')
+1
+ampl: show room_prep_time;param room_prep_time;
+ampl: _display indexarity('room_prep_time');_display 0 1 1
+indexarity('room_prep_time')
+0
+ampl: _display preop_time;_display 1 1 6
+preop_time
+s1,30
+s2,35
+s3,40
+s4,45
+s5,50
+s6,65
+ampl: _display op_time;_display 1 1 6
+op_time
+s1,60
+s2,80
+s3,90
+s4,120
+s5,140
+s6,145
+ampl: _display _VARS;_display 1 0 6
+_VARS
+preop_start_time
+op_start_time
+op_end_time
+y
+z
+overtime
+ampl: show preop_start_time;var preop_start_time{s in SURGERIES}  integer >= 1;
+ampl: _display indexarity('preop_start_time');_display 0 1 1
+indexarity('preop_start_time')
+1
+ampl: show op_start_time;var op_start_time{s in SURGERIES}  integer >= 1;
+ampl: _display indexarity('op_start_time');_display 0 1 1
+indexarity('op_start_time')
+1
+ampl: show op_end_time;var op_end_time{s in SURGERIES}  integer >= 1;
+ampl: _display indexarity('op_end_time');_display 0 1 1
+indexarity('op_end_time')
+1
+ampl: show y;var y{s_prim in SURGERIES, s_bis in SURGERIES: s_prim != s_bis}  binary;
+ampl: _display indexarity('y');_display 0 1 1
+indexarity('y')
+2
+ampl: show z;var z{s_prim in SURGERIES, s_bis in SURGERIES: s_prim != s_bis}  binary;
+ampl: _display indexarity('z');_display 0 1 1
+indexarity('z')
+2
+ampl: show overtime;var overtime{o in OPERATING_ROOMS}  integer >= 0;
+ampl: _display indexarity('overtime');_display 0 1 1
+indexarity('overtime')
+1
+ampl: _display preop_start_time.val;_display 1 1 6
+preop_start_time.val
+s1,1
+s2,186
+s3,381
+s4,1
+s5,146
+s6,301
+ampl: _display op_start_time.val;_display 1 1 6
+op_start_time.val
+s1,31
+s2,221
+s3,421
+s4,46
+s5,196
+s6,366
+ampl: _display op_end_time.val;
