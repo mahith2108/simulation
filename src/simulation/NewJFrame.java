@@ -486,16 +486,19 @@ public class NewJFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
-        try{
-        // Try-catch  
+    try{
         int num=Integer.parseInt(jTextField18.getText());
         int num1=Integer.parseInt(jTextField30.getText());
         int num3=Integer.parseInt(jTextField31.getText());
+        int Or=Integer.parseInt(jTextField17.getText());
+        
+        //int s11=Integer.parseInt(jTextField12.getText());
+        //int s22=Integer.parseInt(jTextField13.getText());
+        //int s33=Integer.parseInt(jTextField14.getText());
+        // Try-catch  
         
         AMPL ampl;
         ampl = new AMPL();
-        
-         
         //Define the directory where models are located    
         String modelpath;
         modelpath="F:/Master thesis/operation room/Other stuff/ampl-demo-mswin/ampl-demo/amplapi/examples/models";
@@ -519,8 +522,7 @@ public class NewJFrame extends javax.swing.JFrame {
        try
         {
            int a,b,c,d,e,f,g,h,i,j,k,a1,b1,c1,d1,e1,f1,g1,h1,i1,j1,k1;
-        
-        String s11,s22,s33;
+       
          int[][] a2 = new int[10][10];
        
         a=Integer.parseInt(jTextField1.getText());
@@ -545,11 +547,7 @@ public class NewJFrame extends javax.swing.JFrame {
         i1=Integer.parseInt(jTextField27.getText());
         j1=Integer.parseInt(jTextField28.getText());
         k1=Integer.parseInt(jTextField29.getText());
-        s11=jTextField12.getName();
-        s22=jTextField13.getText();
-        
-            
-            
+           
         if(num3==10)
        {
         preop_time.setValues(new double[] {a,b,c,d,e,f,g,h,i,j});
@@ -605,10 +603,16 @@ public class NewJFrame extends javax.swing.JFrame {
         System.out.println("elaina error e vastundi");
        }
         }
-        catch(Exception xe)
-        {
-            System.out.println("The exception is "+xe);
-        }
+      
+        catch(NumberFormatException nfe )
+               {
+            System.out.println("the error is" + nfe);
+               }
+       
+       //catch(Exception xe)
+        //{
+          //  System.out.println("The exception is "+xe);
+        //}
        
         
        //System.out.println(preop_time.getValues());
@@ -625,6 +629,280 @@ public class NewJFrame extends javax.swing.JFrame {
         System.out.println("The exception is:" +ey);
       }
        */ 
+       
+       Set s=ampl.getSet("OPERATING_ROOMS");
+       try
+       {
+        if(Or==3)
+        {
+            s.setValues("o1", "o2", "o3");
+        }
+        else if(Or==2)
+        {
+            ampl.getSet("OPERATING_ROOMS").setValues("o1","o2");
+        }
+        else if(Or==1)
+        {
+            ampl.getSet("OPERATING_ROOMS").setValues("o1");
+        }
+        else{
+            System.out.println("Error");
+        }
+       }
+       catch(Exception exee)
+       {
+           System.out.println(exee);
+       }
+       
+       /* Set surgeriesInRoom = ampl.getSet("SURGERIES_IN_ROOM");
+        int i=0;
+       
+        if(s11==5)
+        {
+          surgeriesInRoom.get("o1").setValues("s1","s2","s3","s4","s5");
+          i=5;
+        }
+        else if(s11==4)
+        {
+          surgeriesInRoom.get("o1").setValues("s1","s2","s3","s4");
+          i=4;
+        }   
+        else if(s11==3)
+        {
+           surgeriesInRoom.get("o1").setValues("s1","s2","s3");
+           i=3;
+        }
+        else if(s11==2)
+        {
+            surgeriesInRoom.get("o1").setValues("s1","s2");
+            i=2;
+        }
+        else if(s11==1)
+        {
+            surgeriesInRoom.get("o1").setValues("s1");
+            i=1;
+        }
+        else{
+            System.out.println("Error");
+        }
+        int j=0;
+        if(s22==5 && i>=1 && i<=5)
+        {
+             String s="s";
+             StringBuilder st=new StringBuilder();
+             st.append("");
+             st.append(i+1);
+             String a21 = st.toString();
+             String a22=s.concat(a21);
+            //System.out.println(a22);
+                  
+             st.append("");
+             st.append(i+2);
+             String b21=st.toString(); 
+             String b22=s.concat(b21);
+                  
+             st.append("");
+             st.append(i+3);
+             String c21=st.toString(); 
+             String c22=s.concat(c21);
+                  
+             st.append("");
+             st.append(i+4);
+             String d21=st.toString(); 
+             String d22=s.concat(d21);
+                  
+             st.append("");
+             st.append(i+5);
+             String e21=st.toString(); 
+             String e22=s.concat(e21);
+             surgeriesInRoom.get("o1").setValues(a22,b22,c22,d22,e22);      
+             j=i+5;
+        }
+        else if(s22==4 && i>=1 && i<=5 )
+        {
+             
+             String s="s";
+             StringBuilder st=new StringBuilder();
+             st.append("");
+             st.append(i+1);
+             String a21 = st.toString();
+             String a22=s.concat(a21);
+            //System.out.println(a22);
+                  
+             st.append("");
+             st.append(i+2);
+             String b21=st.toString(); 
+             String b22=s.concat(b21);
+                  
+             st.append("");
+             st.append(i+3);
+             String c21=st.toString(); 
+             String c22=s.concat(c21);
+                  
+             st.append("");
+             st.append(i+4);
+             String d21=st.toString(); 
+             String d22=s.concat(d21);
+            surgeriesInRoom.get("o2").setValues(a22,b22,c22,d22);
+            j=j+4;
+        }
+        else if(s22==3 && i>=1 && i<=5){
+         String s="s";
+             StringBuilder st=new StringBuilder();
+             st.append("");
+             st.append(i+1);
+             String a21 = st.toString();
+             String a22=s.concat(a21);
+            //System.out.println(a22);
+             st.append("");
+             st.append(i+2);
+             String b21=st.toString(); 
+             String b22=s.concat(b21);
+                  
+             st.append("");
+             st.append(i+3);
+             String c21=st.toString(); 
+             String c22=s.concat(c21);
+        surgeriesInRoom.get("o2").setValues(a22,b22,c22);
+             j=j+3;
+        }
+       
+        else if(s22==2 && i>=1 && i<=5){
+        String s="s";
+             StringBuilder st=new StringBuilder();
+             st.append("");
+             st.append(i+1);
+             String a21 = st.toString();
+             String a22=s.concat(a21);
+            //System.out.println(a22);
+             st.append("");
+             st.append(i+2);
+             String b21=st.toString(); 
+             String b22=s.concat(b21);
+        surgeriesInRoom.get("o2").setValues(a22,b22);
+            j=i+2;
+        }
+        
+        else if(s22==1 && i>=1 && i<=5 )
+        {
+         String s="s";
+             StringBuilder st=new StringBuilder();
+             st.append("");
+             st.append(i+1);
+             String a21 = st.toString();
+             String a22=s.concat(a21);
+            //System.out.println(a22);
+        surgeriesInRoom.get("o2").setValues(a22);
+             j=i+1;
+        }
+        else{
+         System.out.println("error");
+        }
+        
+        if(s33==5 && j>=i+1 && j<=i+5){
+            String s="s";
+             StringBuilder st=new StringBuilder();
+             st.append("");
+             st.append(j+1);
+             String a31 = st.toString();
+             String a32=s.concat(a31);
+            //System.out.println(a22);
+                  
+             st.append("");
+             st.append(j+2);
+             String b31=st.toString(); 
+             String b32=s.concat(b31);
+                  
+             st.append("");
+             st.append(j+3);
+             String c31=st.toString(); 
+             String c32=s.concat(c31);
+                  
+             st.append("");
+             st.append(j+4);
+             String d31=st.toString(); 
+             String d32=s.concat(d31);
+                  
+             st.append("");
+             st.append(j+5);
+             String e31=st.toString(); 
+             String e32=s.concat(e31);
+             surgeriesInRoom.get("o3").setValues(a32,b32,c32,d32,e32);  
+        
+        }
+        else if(s33==4 && j>=i+1 && j<=i+5){
+            
+            String s="s";
+             StringBuilder st=new StringBuilder();
+             st.append("");
+             st.append(j+1);
+             String a31 = st.toString();
+             String a32=s.concat(a31);
+            //System.out.println(a22);
+                  
+             st.append("");
+             st.append(j+2);
+             String b31=st.toString(); 
+             String b32=s.concat(b31);
+                  
+             st.append("");
+             st.append(j+3);
+             String c31=st.toString(); 
+             String c32=s.concat(c31);
+                  
+             st.append("");
+             st.append(j+4);
+             String d31=st.toString(); 
+             String d32=s.concat(d31);
+         surgeriesInRoom.get("o3").setValues(a32,b32,c32,d32);
+        }        
+        else if(s33==3 && j>=i+1 && j<=i+5){
+             String s="s";
+             StringBuilder st=new StringBuilder();
+             st.append("");
+             st.append(j+1);
+             String a31 = st.toString();
+             String a32=s.concat(a31);
+            //System.out.println(a22);
+                  
+             st.append("");
+             st.append(j+2);
+             String b31=st.toString(); 
+             String b32=s.concat(b31);
+                  
+             st.append("");
+             st.append(j+3);
+             String c31=st.toString(); 
+             String c32=s.concat(c31);
+        surgeriesInRoom.get("o3").setValues(a32,b32,c32);
+        }
+        else if(s33==2 && j>=i+1 && j<=i+5)
+        {
+         String s="s";
+             StringBuilder st=new StringBuilder();
+             st.append("");
+             st.append(j+1);
+             String a31 = st.toString();
+             String a32=s.concat(a31);
+            //System.out.println(a22);
+                  
+             st.append("");
+             st.append(j+2);
+             String b31=st.toString(); 
+             String b32=s.concat(b31);
+         surgeriesInRoom.get("o3").setValues(a32,b32);
+        }
+        else if(s33==1&& j>=i+1 && j<=i+5)
+        {
+           String s="s";
+         StringBuilder st=new StringBuilder();
+             st.append("");
+             st.append(j+1);
+             String a31 = st.toString();
+             String a32=s.concat(a31);
+            //System.out.println(a22);
+        }
+       */
         Parameter num_teams=ampl.getParameter("num_resources");
         num_teams.setValues(num);
         //ampl.setOption("log_file",modelpath + "/x.txt");
@@ -883,3 +1161,5 @@ jTextField29.setText("29");
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 }
+//OR try catch step keep the get ampl.getSet("OPERATING_ROOMS") before the If statement
+//check git in try step of number of operating rooms
